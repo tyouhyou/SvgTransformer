@@ -1,0 +1,38 @@
+<html>
+  <head>
+      <link rel="stylesheet" type="text/css" href="index.css">
+  </head>
+  <body>
+    <div id="container" style="width:400px;height:400px;background-color:red; overflow:hidden">
+        <svg id="mysvg" width="300" height="200" viewBox="0 0 300 200" preserveAspectRatio="xMinYMin slice" xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <circle cx="150" cy="100" r="10" />
+            <circle cx="10" cy="10" r="10" />
+            <circle cx="290" cy="190" r="10" />
+            <rect x="90" y ="60" width="10" height="20">
+        </svg>
+    </div>
+    <div class="toolbar">
+      <div class="zoomin button">zoom in</div>
+      <div class="zoomout button">zoom out</div>
+    </div>
+    <div class="toolbar">
+      <div class="left button">left</div>
+      <div class="right button">right</div>
+    </div>
+    <div class="toolbar">
+      <div class="up button">up</div>
+      <div class="down button">down</div>
+    </div>
+    <div class="toolbar">
+      <div class="expwindow button">exp window</div>
+      <div class="expsvg button">exp svg</div>
+    </div>
+     <div class="toolbar">
+      <div class="load button">load</div>
+      <div class="button">test</div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.3.js" integrity="sha256-1XMpEtA4eKXNNpXcJ1pmMPs8JV+nwLdEqwiJeCQEkyc=" crossorigin="anonymous"></script>
+    <script src="svgtransformer.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
