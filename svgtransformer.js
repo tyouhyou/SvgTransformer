@@ -91,11 +91,11 @@ SvgTransformer.prototype = {
         this._setViewportSize(size);
     }
     ,
-    zoomAroundCenter(addScale) {
+    zoomAroundCenter: function(addScale) {
         this.zoomToAroundViewCenter(this.scale + addScale);
     }
     ,
-    zoomByAroundContainerCenter(addScale, containerW, containerH) {
+    zoomByAroundContainerCenter: function(addScale, containerW, containerH) {
         var offset = this.$wrapper.offset();
         var cx = containerW / 2;
         var cy = containerH / 2;
@@ -109,7 +109,7 @@ SvgTransformer.prototype = {
         this.zoomBy(addScale);
     }
     ,
-    zoomToAroundViewCenter(scale) {
+    zoomToAroundViewCenter: function(scale) {
         var centerB = this._getWrapperCenter();
         this.zoomTo(scale);
         var centerA = this._getWrapperCenter();
