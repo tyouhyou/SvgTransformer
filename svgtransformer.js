@@ -1,3 +1,90 @@
+/* *
+ * IMPORTANT NOTE:
+ *   This simple query is not for general usage, that means
+ *   no detail checking on the arguments or etc. It is just used 
+ *   for limited patterns. 
+ * 
+ *   Since we will not handle multiple element(svg) in one instance,
+ *   this implementation just wrap one element in it's instance.
+ *   It's different from jQuery.
+ * 
+ *   So, be careful when pass selector to SvgTransformer constructor,
+ *   it should be best practice to pass a dom id, or a dom element object.
+ * 
+ * Target browsers are chrome and ie11 or above
+ * */
+(function(global){
+    /* 
+     * IMPORTANT: 
+     *   Only dom selector string or dom element is supported. 
+     *   And only the first element of the selector will be taken.
+     */
+    function $$(selectorOrElement) {
+        if (!(this instanceof $$)) {
+            return new $$(selectorOrElement);
+        }
+
+        if (typeof selectorOrElement == "string") {
+            this.element = document.querySelector(selectorOrElement);
+        } else {
+            this.element = selectorOrElement;
+        }
+    }
+    $$.prototype = {
+        element: null,
+        wrap: function(tag) {
+            var wrapper = document.createElement(tag);
+            this.element.parentNode.insertBefore(wrapper, this.element);
+            wrapper.appendChild(this.element);
+            return new $$(wrapper);
+        },
+        attr: function(att, value) {
+            if (value === undefined) {
+                return this.element.getAttribute(att);
+            } else {
+                this.element.setAttribute(att, value);
+            }
+        },
+        css: function(name, value) {
+            if (value === undefined) {
+                return this.element.style[name];
+            } else {
+                this.element.style[name] = value;
+            }
+        },
+        offset: function(setting) {
+            if (setting === undefined) {
+                return {'top': this.element.offsetTop, 'left': this.element.offsetLeft}
+            } else {
+                this.css('top', setting.top);
+                this.css('left', setting.left);
+            }
+        },
+        width: function(value) {
+            if (value === undefined) {
+                return parseFloat(window.getComputedStyle(this.element, null).getPropertyValue("width"), 10);
+            } else {
+                if (typeof(value) === "number") {
+                    value += "px";
+                }
+                this.css('width', value);
+            }
+        },
+        height: function(value) {
+            if (value === undefined) {
+                return parseFloat(window.getComputedStyle(this.element, null).getPropertyValue("height"), 10);
+            } else {
+                if (typeof(value) === "number") {
+                    value += "px";
+                }
+                this.css('height', value);
+            }
+        }
+    }
+
+    global.$$ = $$;
+})(window);
+
 function SvgTransformer(svg_selector) {
     if (!(this instanceof SvgTransformer)) {
         return new SvgTransformer(svg_selector);
@@ -6,35 +93,25 @@ function SvgTransformer(svg_selector) {
 }
 SvgTransformer.prototype = {
     _init: function(svg) {
-        var $svg = $(svg)
-        this.svg = $svg[0];
-
+        var $svg = $$(svg)
         this.scale = 1;
         this.originViewPort = {'width': $svg.width(), 'height': $svg.height()};
-        this._makeWrapper($svg);
-        this.originOffset = this.$wrapper.offset();
+
+        this.$svg = $svg;
+        this.$wrapper = this._makeWrapper($svg);
+        this._setWrapperSize(this._getViewPortSize());
     }
     ,
     // TODO: note, set the display property same as svg (inline, block ect.)
     _makeWrapper: function($svg) {
-        var svgid = $svg.attr('id');
-        $svg.wrap(function() {
-            return '<div id="' + svgid + '_wrapper"></div>';
-        });
+        var $wrapper = $svg.wrap('div');
+        $wrapper.css('cssText', 'position: absolute; top: 0; left: 0; padding: 0; margin: 0;')
         
-        this.$wrapper = $svg.parent();
-        this.$wrapper.css({'relative': 'relative', 
-                           'padding': '0', 
-                           'margin': '0',
-                           'top': '0',
-                           'left': '0'
-                        });
-        this._setWrapperSize(this._getViewPortSize());
+        // TODO: remove (for test only)
+        $wrapper.css('border', '1px solid');
+        $wrapper.css('background', 'blue');
 
-        // TODO: remove
-        this.$wrapper.css('border', '1px solid');
-        this.$wrapper.css('background', 'blue');
-
+        return $wrapper;
     }
     ,
     _setWrapperSize: function(viewportSize) {
@@ -60,14 +137,14 @@ SvgTransformer.prototype = {
     ,
     _getViewPortSize: function() {
         var viewport = {};
-        viewport.width = parseFloat(this.svg.getAttribute('width'));
-        viewport.height = parseFloat(this.svg.getAttribute('height'));
+        viewport.width = parseFloat(this.$svg.attr('width'));
+        viewport.height = parseFloat(this.$svg.attr('height'));
         return viewport;
     }
     ,
     _setViewportSize: function(viewport) {
-        this.svg.setAttribute('width', viewport.width);
-        this.svg.setAttribute('height', viewport.height);
+        this.$svg.attr('width', viewport.width);
+        this.$svg.attr('height', viewport.height);
     }
     ,
     moveBy : function(offsetX, offsetY) {
@@ -100,8 +177,8 @@ SvgTransformer.prototype = {
         var cx = containerW / 2;
         var cy = containerH / 2;
         
-        var distX = cx - offset.left + this.originOffset.left;
-        var distY = cy - offset.top + this.originOffset.top;
+        var distX = cx - offset.left;
+        var distY = cy - offset.top;
         var deltaX = distX / this.scale * (this.scale + addScale) - distX;
         var deltaY = distY / this.scale * (this.scale + addScale) - distY;
         
@@ -126,7 +203,7 @@ SvgTransformer.prototype = {
                   ;
         
         ratio *= this.scale;
-        this.$wrapper.offset(this.originOffset);
+        this.$wrapper.offset({top: 0, left: 0});
         this.zoomTo(ratio);
         
         viewSize = this._getWrapperSize();

@@ -3,7 +3,12 @@
       <link rel="stylesheet" type="text/css" href="index.css">
   </head>
   <body>
-    <div id="container" style="width:400px;height:400px;background-color:red; overflow:hidden">
+      <!--
+          NOTE:
+            1. The container should have a 'postition' style other than static.
+            2. The svg width height has no unit (such as px). If has any, the js should adjust to it to px.
+        -->
+    <div id="container" style="position: relative; width:400px;height:400px;background-color:red; overflow:hidden">
         <svg id="mysvg" width="300" height="200" viewBox="0 0 300 200" preserveAspectRatio="xMinYMin slice" xmlns="http://www.w3.org/2000/svg" version="1.1">
             <circle cx="150" cy="100" r="10" />
             <circle cx="10" cy="10" r="10" />
@@ -31,7 +36,7 @@
       <div class="load button">load</div>
       <div class="button">test</div>
     </div>
-    <script src="https://code.jquery.com/jquery-1.12.3.js" integrity="sha256-1XMpEtA4eKXNNpXcJ1pmMPs8JV+nwLdEqwiJeCQEkyc=" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.12.3.js" integrity="sha256-1XMpEtA4eKXNNpXcJ1pmMPs8JV+nwLdEqwiJeCQEkyc=" crossorigin="anonymous"></script> -->
     <script src="svgtransformer.js"></script>
     <script src="index.js"></script>
   </body>
