@@ -1,47 +1,51 @@
 
   (function(){
     var transformer = new SvgTransformer('#mysvg');
-    $zoomin = $$('.zoomin').element;
-    $zoomout = $$('.zoomout').element;
-    $left = $$('.left').element;
-    $right = $$('.right').element;
-    $up = $$('.up').element;
-    $down = $$('.down').element;
-    $expw = $$('.expwindow').element;
-    $exps = $$('.expsvg').element;
-    $load = $$('.load').element;
-    $zoomin.addEventListener( 'click', function(){
+    $zoomin = $$('.zoomin');
+    $zoomout = $$('.zoomout');
+    $left = $$('.left');
+    $right = $$('.right');
+    $up = $$('.up');
+    $down = $$('.down');
+    $expwx = $$('.expwX');
+    $expsvg = $$('.expsvg');
+    $load = $$('.load');
+    $expwy = $$('.expwY');
+    $zoomin.on( 'click', function(){
         var $cnt = $$('#container');
-        transformer.zoomByAroundContainerCenter(0.1, $cnt.width(), $cnt.height());
-        // transformer.zoomAroundCenter(0.1);
+        transformer.zoomAroundContainerCenter(0.1, $cnt.width(), $cnt.height());
     });
-    $zoomout.addEventListener('click', function(){
-        var $cnt = $$('#container');
-        transformer.zoomByAroundContainerCenter(-0.1, $cnt.width(), $cnt.height());
-        // transformer.zoomAroundCenter(-0.1);
+    $zoomout.on('click', function(){
+      var $cnt = $$('#container');
+      transformer.zoomAroundContainerCenter(-0.1, $cnt.width(), $cnt.height());
     });
-    $left.addEventListener('click', function(){
-      transformer.moveBy(-10, 0);
+    $left.on('click', function(){
+      transformer.move(-10, 0);
     });
-    $right.addEventListener('click', function() {
-      transformer.moveBy(10, 0);
+    $right.on('click', function() {
+      transformer.move(10, 0);
     });
-    $up.addEventListener('click', function() {
-      transformer.moveBy(0, -10);
+    $up.on('click', function() {
+      transformer.move(0, -10);
     });
-    $down.addEventListener('click', function(){
-      transformer.moveBy(0, 10);
+    $down.on('click', function(){
+      transformer.move(0, 10);
     });
-    $expw.addEventListener('click', function(){
+    $expwx.on('click', function(){
       var $cnt = $$('#container');
       var w = $cnt.width() + 50;
       $cnt.width(w);
     });
-    $exps.addEventListener('click', function(){
+    $expwy.on('click', function(){
+      var $cnt = $$('#container');
+      var w = $cnt.height() + 30;
+      $cnt.height(w);
+    });
+    $expsvg.on('click', function(){
         // DO NOTHING
     });
-    $load.addEventListener('click', function(){
+    $load.on('click', function(){
         var $cnt = $$('#container');
-        transformer.fitToContainer($cnt.width(), $cnt.height());
+        transformer.fitContainer($cnt.width(), $cnt.height());
     })
   })();
