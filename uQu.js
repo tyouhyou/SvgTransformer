@@ -31,6 +31,15 @@
         }
     }
     $$.prototype = {
+        parent: function() {
+            return new $$(this._element.parentNode); // NOTE: it node. IE11 has poor support for parentElement
+        },
+        firstChild: function() {
+            if (!this._element.children || this._element.children.length <= 0) {
+                return undefined;
+            }
+            return new $$(this._element.children[0]);
+        },
         wrap: function(tag) {
             var wrapper = document.createElement(tag);
             this._element.parentNode.insertBefore(wrapper, this._element);

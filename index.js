@@ -1,6 +1,6 @@
 
   (function(){
-    var transformer = new SvgTransformer('#mysvg');
+    var transformer = new SvggTransformer('#mysvg');
     $zoomin = $$('.zoomin');
     $zoomout = $$('.zoomout');
     $left = $$('.left');
@@ -12,12 +12,10 @@
     $load = $$('.load');
     $expwy = $$('.expwY');
     $zoomin.on( 'click', function(){
-        var $cnt = $$('#container');
-        transformer.zoomAroundContainerCenter(0.1, $cnt.width(), $cnt.height());
+        transformer.zoomAroundContainerCenter(0.1);
     });
     $zoomout.on('click', function(){
-      var $cnt = $$('#container');
-      transformer.zoomAroundContainerCenter(-0.1, $cnt.width(), $cnt.height());
+      transformer.zoomAroundContainerCenter(-0.1);
     });
     $left.on('click', function(){
       transformer.move(-10, 0);
@@ -42,10 +40,9 @@
       $cnt.height(w);
     });
     $expsvg.on('click', function(){
-        // DO NOTHING
+        transformer.expandViewPortToFitContainer();
     });
     $load.on('click', function(){
-        var $cnt = $$('#container');
-        transformer.fitContainer($cnt.width(), $cnt.height());
+        transformer.fitContainer();
     })
   })();

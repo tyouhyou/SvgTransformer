@@ -12,6 +12,7 @@ SvgTransformer.prototype = {
         this.originViewPort = {'width': $svg.width(), 'height': $svg.height()};
 
         this.$svg = $svg;
+        this.$cnt = $svg.parent();
         this.$wrapper = this._makeWrapper($svg);
         this._setWrapperSize(this._getViewPortSize());
     }
@@ -21,8 +22,8 @@ SvgTransformer.prototype = {
         $wrapper.css('cssText', 'position: absolute; padding: 0; margin: 0;')
         
         // TODO: remove (for test only)
-        $wrapper.css('border', '1px solid');
-        $wrapper.css('background', 'blue');
+        // $wrapper.css('border', '1px solid');
+        // $wrapper.css('background', 'blue');
 
         return $wrapper;
     }
@@ -83,8 +84,11 @@ SvgTransformer.prototype = {
         return this.scale(this.curScale + addScale);
     }
     ,
-    zoomAroundContainerCenter: function(addScale, containerW, containerH) {
+    zoomAroundContainerCenter: function(addScale) {
         var offset = this.$wrapper.offset();
+
+        var containerW = this.$cnt.width();
+        var containerH = this.$cnt.height();
         var cx = containerW / 2;
         var cy = containerH / 2;
 
@@ -110,8 +114,11 @@ SvgTransformer.prototype = {
         return true;
     }
     ,
-    fitContainer : function (containerW, containerH) {
+    fitContainer : function () {
         var viewSize = this._getWrapperSize();
+
+        var containerW = this.$cnt.width();
+        var containerH = this.$cnt.height();
         var wscale = containerW / viewSize.width;
         var hscale = containerH / viewSize.height;
         var ratio = wscale > hscale 
