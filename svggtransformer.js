@@ -9,14 +9,12 @@ function SvggTransformer(svg, svgG) {
         var $svg = $$(svg);
         
         if (!hasgwrap) {
-            var s = $svg._element.innerHTML;
-            var g = '<g>' + s + '</g>';
-            $svg._element.innerHTML = g;
+            $svg.wrapInner('g', true);
         }
         
         this.$svg = $svg;
-        this.$cnt = $svg.parent();
-        this.$svgG = $svg.firstChild();
+        this.$cnt = $svg.parentElement();
+        this.$svgG = $svg.firstChildElement();
 
         this.curScale = 1;
         this.translateX = 0;
@@ -31,8 +29,8 @@ function SvggTransformer(svg, svgG) {
         var vb = this.$svg.attr("viewBox");
         var vbs = vb.split(" ");
         
-        var cx = (1 - this.curScale) * parseFloat(vbs[2]) / 2;
-        var cy = (1 - this.curScale) * parseFloat(vbs[3]) / 2;
+        var cx = (1 - this.curScale) * parseFloat(this.$cnt.width()) / 2;
+        var cy = (1 - this.curScale) * parseFloat(this.$cnt.height()) / 2;
 
         tl = " translate(" + cx + "," + cy + ")" + tl;
         this.$svgG.attr('transform', tl);

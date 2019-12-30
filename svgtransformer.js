@@ -12,14 +12,14 @@ SvgTransformer.prototype = {
         this.originViewPort = {'width': $svg.width(), 'height': $svg.height()};
 
         this.$svg = $svg;
-        this.$cnt = $svg.parent();
+        this.$cnt = $svg.parentElement();
         this.$wrapper = this._makeWrapper($svg);
         this._setWrapperSize(this._getViewPortSize());
     }
     ,
     _makeWrapper: function($svg) {
         var $wrapper = $svg.wrap('div');
-        $wrapper.css('cssText', 'position: absolute; padding: 0; margin: 0;')
+        $wrapper.css('cssText', 'position: absolute; top: 0; left: 0 padding: 0; margin: 0;')
         
         // TODO: remove (for test only)
         // $wrapper.css('border', '1px solid');

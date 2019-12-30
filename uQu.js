@@ -31,20 +31,49 @@
         }
     }
     $$.prototype = {
-        parent: function() {
-            return new $$(this._element.parentNode); // NOTE: it node. IE11 has poor support for parentElement
-        },
-        firstChild: function() {
-            if (!this._element.children || this._element.children.length <= 0) {
-                return undefined;
+        // IE has poor support for parentElement
+        parentElement: function() {
+            var ret = null;
+            if (!!this._element.parentNode && Node.ELEMENT_NODE === this._element.parentNode.nodeType) {
+                ret = new $$(this._element.parentNode);
             }
-            return new $$(this._element.children[0]);
+            return ret;
         },
-        wrap: function(tag) {
-            var wrapper = document.createElement(tag);
+        firstChildElement: function() {
+            var ret = null;
+            if (this._element.hasChildNodes()) {
+                for (var i=0; i<this._element.childNodes.length; i++) {
+                    if (Node.ELEMENT_NODE === this._element.childNodes[i].nodeType) {
+                        ret = new $$(this._element.childNodes[i]);
+                        break;
+                    }
+                }
+            }
+            return ret;
+        },
+        wrap: function(tag, isSvgEl) {
+            var wrapper;
+            if (isSvgEl) {
+                wrapper = document.createElementNS('http://www.w3.org/2000/svg', tag)
+            } else {
+                wrapper = document.createElement(tag);
+            }
             this._element.parentNode.insertBefore(wrapper, this._element);
             wrapper.appendChild(this._element);
             return new $$(wrapper);
+        },
+        wrapInner: function(tag, isSvgEl) {
+            var wrapper;
+            if (isSvgEl) {
+                wrapper = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            } else {
+                wrapper = document.createElement(tag);
+            }
+            while (this._element.firstChild) {
+                wrapper.appendChild(this._element.removeChild(this._element.firstChild));
+            }
+            this._element.appendChild(wrapper);
+            return $$(wrapper);
         },
         attr: function(att, value) {
             if (value === undefined) {
