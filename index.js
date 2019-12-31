@@ -40,7 +40,9 @@
       $cnt.height(w);
     });
     $expsvg.on('click', function(){
+      if (transformer instanceof SvggTransformer) {
         transformer.expandViewPortToFitContainer();
+      }
     });
     $load.on('click', function(){
         transformer.fitContainer();

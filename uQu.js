@@ -4,14 +4,14 @@
  *   no detail checking on the arguments or etc. It is just used 
  *   for limited patterns. 
  * 
- *   Since we will not handle multiple element(svg) in one instance,
- *   this implementation just wrap one element in it's instance.
+ *   Since we will not handle multiple elements in one instance,
+ *   this implementation just take one element in it's instance.
  *   It's different from jQuery.
  * 
- *   So, be careful when pass selector to SvgTransformer constructor,
+ *   Be careful when pass selector to SvgTransformer constructor,
  *   it should be best practice to pass a dom id, or a dom element object.
  * 
- * Target browsers are chrome and ie11 or above
+ * Target browsers are chrome, edge and ie11 or above
  * */
 (function(global){
     /* 
@@ -51,10 +51,10 @@
             }
             return ret;
         },
-        wrap: function(tag, isSvgEl) {
+        wrap: function(tag, namespace) {
             var wrapper;
-            if (isSvgEl) {
-                wrapper = document.createElementNS('http://www.w3.org/2000/svg', tag)
+            if (!!namespace) {
+                wrapper = document.createElementNS(namespace, tag)
             } else {
                 wrapper = document.createElement(tag);
             }
@@ -62,10 +62,10 @@
             wrapper.appendChild(this._element);
             return new $$(wrapper);
         },
-        wrapInner: function(tag, isSvgEl) {
+        wrapInner: function(tag, namespace) {
             var wrapper;
-            if (isSvgEl) {
-                wrapper = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            if (!!namespace) {
+                wrapper = document.createElementNS(namespace, tag);
             } else {
                 wrapper = document.createElement(tag);
             }

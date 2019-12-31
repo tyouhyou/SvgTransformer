@@ -70,10 +70,10 @@ SvgTransformer.prototype = {
         this.$wrapper.offset({'top' : offset.top + offsetY, 'left': offset.left + offsetX});
     }
     ,
-    scale: function(scale) {
-        if (scale <= 0.01) return false;        // TODO: 0.01 magic
+    scale: function(newScale) {
+        if (newScale <= 0.01) return false;        // TODO: 0.01 magic
 
-        this.curScale = scale;
+        this.curScale = newScale;
         var size = {'width' : this.originViewPort.width * this.curScale, 'height' : this.originViewPort.height * this.curScale};
         this._setWrapperSize(size);
         this._setViewportSize(size);
@@ -102,13 +102,17 @@ SvgTransformer.prototype = {
         return true;
     }
     ,
+    scaleAroundContainerCenter: function(newScale) {
+        // TODO
+    }
+    ,
     zoomAroundSvgCenter: function(addScale) {
         return this.scaleAroundSvgCenter(this.curScale + addScale);
     }
     ,
-    scaleAroundSvgCenter: function(scale) {
+    scaleAroundSvgCenter: function(newScale) {
         var centerB = this._getWrapperCenter();
-        if (!this.scale(scale)) return false;
+        if (!this.scale(newScale)) return false;
         var centerA = this._getWrapperCenter();
         this.move(centerB.cx - centerA.cx, centerB.cy - centerA.cy);
         return true;
