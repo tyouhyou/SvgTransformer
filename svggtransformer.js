@@ -1,8 +1,8 @@
-function SvggTransformer(svg, svgG) {
+function SvggTransformer(svg, hasgwrap) {
     if (!(this instanceof SvggTransformer)) {
-          return new SvggTransformer(svg, svgG);
+          return new SvggTransformer(svg, hasgwrap);
       }
-      this._init(svg, svgG);
+      this._init(svg, hasgwrap);
   }
   SvggTransformer.prototype = {
     _init : function(svg, hasgwrap) {
